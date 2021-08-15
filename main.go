@@ -5,61 +5,61 @@ import (
 	"net/http"
 )
 
-// album represents data about a record album.
-type album struct {
+// book represents data about a single book.
+type book struct {
 	ID     string  `json:"id"`
 	Title  string  `json:"title"`
-	Artist string  `json:"artist"`
+	Author string  `json:"author"`
 	Price  float64 `json:"price"`
 }
 
-// albums slice to seed record album data. In memory database
-var albums = []album{
-	{ID: "1", Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
-	{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
-	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
+// books slice to seed book data. In memory database
+var books = []book{
+	{ID: "1", Title: "The Lord of the Rings - The fellowship of the ring", Author: "J. R. R. Tolkien", Price: 1.00},
+	{ID: "2", Title: "The Lord of the Rings  - The two towers", Author: "J. R. R. Tolkien", Price: 2.00},
+	{ID: "3", Title: "The Lord of the Rings  - The return of the king", Author: "J. R. R. Tolkien", Price: 3.00},
 }
 
-// getAlbums responds with the list of all albums as JSON.
-func getAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, albums)
+// getBooks responds with the list of all books as JSON.
+func getBooks(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, books)
 }
 
-// postAlbums adds an album from JSON received in the request body.
-func postAlbums(c *gin.Context) {
-	var newAlbum album
+// postBooks adds an book from JSON received in the request body.
+func postBooks(c *gin.Context) {
+	var newBook book
 
-	// Call BindJSON to bind the received JSON to newAlbum.
-	if err := c.BindJSON(&newAlbum); err != nil {
+	// Call BindJSON to bind the received JSON to newBook.
+	if err := c.BindJSON(&newBook); err != nil {
 		return
 	}
 
-	// Add the new album to the slice.
-	albums = append(albums, newAlbum)
-	c.IndentedJSON(http.StatusCreated, newAlbum)
+	// Add the new book to the slice.
+	books = append(books, newBook)
+	c.IndentedJSON(http.StatusCreated, newBook)
 }
 
-// getAlbumByID locates the album whose ID value matches the id
-// parameter sent by the client, then returns that album as a response.
-func getAlbumByID(c *gin.Context) {
+// getBookByID locates the book whose ID value matches the id
+// parameter sent by the client, then returns that book as a response.
+func getBookByID(c *gin.Context) {
 	id := c.Param("id")
 
-	// Loop over the list of albums, looking for
-	// an album whose ID value matches the parameter.
-	for _, a := range albums {
+	// Loop over the list of books, looking for
+	// an book whose ID value matches the parameter.
+	for _, a := range books {
 		if a.ID == id {
 			c.IndentedJSON(http.StatusOK, a)
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func main() {
 	router := gin.Default()
-	router.GET("/albums", getAlbums)
-	router.GET("/albums/:id", getAlbumByID)
-	router.POST("/albums", postAlbums)
+	router.GET("/books", getBooks)
+	router.GET("/books/:id", getBookByID)
+	router.POST("/books", postBooks)
 
 	router.Run("localhost:8080")
 }
