@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: books-go-gin
+  namespace: sandbox
+spec:
+  entryPoints:
+  - http
+  routes:
+  - kind: Rule
+    match: Host(`books.apps.masales.lab`)
+    priority: 10
+    services:
+    - kind: Service
+      namespace: sandbox
+      name: books-go-gin
+      port: 8080
+      passHostHeader: true
+      scheme: http

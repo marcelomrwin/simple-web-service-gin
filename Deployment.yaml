@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: sandbox
+  name: books-go-gin
+  labels:
+    app: books-go-gin
+spec:
+  ports:
+    - port: 8080
+      protocol: "TCP"
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: books-go-gin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: books-go-gin
+  labels:
+    app: books-go-gin
+  namespace: sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: books-go-gin
+      tier: api
+  template:
+    metadata:
+      labels:
+        app: books-go-gin
+        tier: api
+    spec:
+      containers:
+        - name: books-go-gin
+          image: "marcelodsales/books-go-gin:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP

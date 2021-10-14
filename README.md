@@ -32,3 +32,9 @@ curl localhost:8080/books/1
 ```bash
 curl http://localhost:8080/books --include --header "Content-Type: application/json" --request "POST" --data '{"id": "4","title": "The Hobbit","author": "Tolkien","price": 4.00}'
 ```
+
+# Docker and Kubernetes
+
+```
+docker build -t marcelodsales/books-go-gin:latest .
+```
